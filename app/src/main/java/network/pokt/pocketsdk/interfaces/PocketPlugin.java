@@ -9,13 +9,16 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
 
+import network.pokt.pocketsdk.exceptions.CreateQueryException;
+import network.pokt.pocketsdk.exceptions.CreateTransactionException;
+import network.pokt.pocketsdk.exceptions.CreateWalletException;
+import network.pokt.pocketsdk.exceptions.ImportWalletException;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import network.pokt.pocketsdk.exceptions.PocketPluginException;
 import network.pokt.pocketsdk.models.Wallet;
 import network.pokt.pocketsdk.models.Query;
 import network.pokt.pocketsdk.models.Transaction;
@@ -23,27 +26,31 @@ import network.pokt.pocketsdk.models.Transaction;
 /**
  * All Pocket Android Plugins must implement this interface.
  */
+@SuppressWarnings("unused")
 public abstract class PocketPlugin {
 
     // Public interface with the Plugin's implementation details
     @SuppressWarnings("unused")
-    public abstract Wallet createWallet(Map<String, Object> data) throws PocketPluginException;
+    public abstract Wallet createWallet(Map<String, Object> data) throws CreateWalletException;
 
     @SuppressWarnings("unused")
-    public abstract Wallet importWallet(String privateKey, String address, Map<String, Object> data) throws PocketPluginException;
+    public abstract Wallet importWallet(String privateKey, String address, Map<String, Object> data) throws ImportWalletException;
 
     @SuppressWarnings("unused")
-    public abstract Transaction createTransaction(Wallet wallet, String subnetwork, Map<String, Object> params) throws PocketPluginException;
+    public abstract Transaction createTransaction(Wallet wallet, String subnetwork, Map<String, Object> params) throws CreateTransactionException;
 
     @SuppressWarnings("unused")
-    public abstract Query createQuery(String subnetwork, Map<String, Object> params, Map<String, Object> decoder) throws PocketPluginException;
+    public abstract Query createQuery(String subnetwork, Map<String, Object> params, Map<String, Object> decoder) throws CreateQueryException;
+
+    @SuppressWarnings("unused")
+    public abstract String getNetwork();
 
     // Class implementation, can be overriden by Plugin
-    @NotNull protected Configuration configuration;
-    @NotNull protected URL queriesURL;
-    @NotNull protected URL transactionsURL;
-    protected final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    protected OkHttpClient client = new OkHttpClient();
+    @NotNull Configuration configuration;
+    @NotNull URL queriesURL;
+    @NotNull URL transactionsURL;
+    final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    OkHttpClient client = new OkHttpClient();
 
     @SuppressWarnings("unused")
     public PocketPlugin(@NotNull Configuration configuration) throws MalformedURLException {
@@ -52,7 +59,7 @@ public abstract class PocketPlugin {
         this.transactionsURL = new URL(configuration.getNodeUrl(), "/transactions");
     }
 
-    protected <R extends Codable> R sendRequest(R request, URL url) throws IOException, JSONException {
+     <R extends Codable> R sendRequest(R request, URL url) throws IOException, JSONException {
         RequestBody body = RequestBody.create(this.JSON, request.toJSONRequestString());
         Request urlRequest = new Request.Builder()
                 .url(url)
@@ -74,7 +81,7 @@ public abstract class PocketPlugin {
         return this.sendRequest(transaction, transactionsURL);
     }
 
-    protected <R extends Codable> void sendRequestAsync(R request, URL url, SendRequestCallback callback) throws JSONException {
+    <R extends Codable> void sendRequestAsync(R request, URL url, SendRequestCallback callback) {
         RequestBody body = RequestBody.create(this.JSON, request.toJSONRequestString());
         Request urlRequest = new Request.Builder()
                 .url(url)
@@ -84,12 +91,12 @@ public abstract class PocketPlugin {
     }
 
     @SuppressWarnings("unused")
-    public <Q extends Query> void executeQueryAsync(Q query, SendRequestCallback callback) throws JSONException {
+    public <Q extends Query> void executeQueryAsync(Q query, SendRequestCallback callback) {
         this.sendRequestAsync(query, queriesURL, callback);
     }
 
     @SuppressWarnings("unused")
-    public <T extends Transaction> void sendTransactionAsync(T transaction, SendRequestCallback callback) throws JSONException {
+    public <T extends Transaction> void sendTransactionAsync(T transaction, SendRequestCallback callback) {
         this.sendRequestAsync(transaction, transactionsURL, callback);
     }
 }
