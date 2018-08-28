@@ -24,28 +24,39 @@ public class Wallet extends JSONObject {
     @NotNull String address;
     @NotNull String privateKey;
     @NotNull String network;
+    @NotNull String subnetwork;
     JSONObject data;
     ECSymmetric crypto = new ECSymmetric();
-    static final String WALLET_RECORD_KEYS_KEY = "POCKET_WALLETS_RECORD_KEYS";
 
-    public Wallet(@NotNull String address, @NotNull String privateKey, @NotNull String network, JSONObject data) throws JSONException {
+    // Constants
+    static final String WALLET_RECORD_KEYS_KEY = "POCKET_WALLETS_RECORD_KEYS";
+    static final String ADDRESS_KEY = "address";
+    static final String PRIVATE_KEY_KEY = "privateKey";
+    static final String NETWORK_KEY = "network";
+    static final String SUBNETWORK_KEY = "subnetwork";
+    static final String DATA_KEY = "data";
+
+    public Wallet(@NotNull String address, @NotNull String privateKey, @NotNull String network, @NotNull String subnetwork, JSONObject data) throws JSONException {
         super();
         this.address = address;
         this.privateKey = privateKey;
         this.network = network;
+        this.subnetwork = subnetwork;
         this.data = data;
-        this.put("address", address);
-        this.put("privateKey", privateKey);
-        this.put("network", network);
-        this.put("data", data);
+        this.put(ADDRESS_KEY, address);
+        this.put(PRIVATE_KEY_KEY, privateKey);
+        this.put(NETWORK_KEY, network);
+        this.put(SUBNETWORK_KEY, subnetwork);
+        this.put(DATA_KEY, data);
     }
 
     public Wallet(String jsonString) throws JSONException {
         super(jsonString);
-        this.address = this.getString("address");
-        this.privateKey = this.getString("privateKey");
-        this.network = this.getString("network");
-        this.data = this.optJSONObject("data");
+        this.address = this.getString(ADDRESS_KEY);
+        this.privateKey = this.getString(PRIVATE_KEY_KEY);
+        this.network = this.getString(NETWORK_KEY);
+        this.subnetwork = this.getString(SUBNETWORK_KEY);
+        this.data = this.optJSONObject(DATA_KEY);
     }
 
     @SuppressWarnings("unused")
@@ -62,16 +73,19 @@ public class Wallet extends JSONObject {
         return network;
     }
 
+    @SuppressWarnings("unused")
+    public String getSubnetwork() { return subnetwork; }
+
     public JSONObject getData() {
         return data;
     }
 
-    public static String recordKey(@NotNull String network, @NotNull String address) {
-        return network + "/" + address;
+    public static String recordKey(@NotNull String network, @NotNull String subnetwork, @NotNull String address) {
+        return network + "/" + subnetwork + "/" + address;
     }
 
     public String recordKey() {
-        return Wallet.recordKey(this.network, this.address);
+        return Wallet.recordKey(this.network, this.subnetwork, this.address);
     }
 
     // Persistence interfaces
@@ -93,15 +107,14 @@ public class Wallet extends JSONObject {
     }
 
     @SuppressWarnings("unused")
-    public static boolean isSaved(@NotNull String network, @NotNull String address, @NotNull Context context) {
+    public static boolean isSaved(@NotNull String network, @NotNull String subnetwork, @NotNull String address, @NotNull Context context) {
         Hawk.init(context).build();
-        return Hawk.contains(Wallet.recordKey(network, address));
+        return Hawk.contains(Wallet.recordKey(network, subnetwork, address));
     }
 
     @SuppressWarnings("unused")
     public boolean isSaved(@NotNull Context context) {
-        Hawk.init(context).build();
-        return Hawk.contains(this.recordKey());
+        return Wallet.isSaved(this.network, this.subnetwork, this.address, context);
     }
 
     @SuppressWarnings("unused")
@@ -143,12 +156,12 @@ public class Wallet extends JSONObject {
     }
 
     @SuppressWarnings("unused")
-    public static void retrieve(@NotNull String network, @NotNull String address, @NotNull String passphrase, @NotNull Context context, @NotNull WalletRetrieveListener listener) throws WalletPersistenceException {
-        if (!Wallet.isSaved(network, address, context)) {
+    public static void retrieve(@NotNull String network, @NotNull String subnetwork, @NotNull String address, @NotNull String passphrase, @NotNull Context context, @NotNull WalletRetrieveListener listener) throws WalletPersistenceException {
+        if (!Wallet.isSaved(network, subnetwork, address, context)) {
             throw new WalletPersistenceException(String.format("No wallet found for Network %s and Address %s", network, address));
         }
 
-        String recordKey = Wallet.recordKey(network, address);
+        String recordKey = Wallet.recordKey(network, subnetwork, address);
         Hawk.init(context).build();
         String encryptedWalletJson = Hawk.get(recordKey);
 
