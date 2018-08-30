@@ -6,9 +6,9 @@ import network.pokt.pocketsdk.models.Wallet;
 
 public class CreateTransactionException extends Exception {
 
-    Wallet wallet;
-    String subnetwork;
-    Map<String, Object> params;
+    private Wallet wallet;
+    private String subnetwork;
+    private Map<String, Object> params;
 
     public CreateTransactionException(Wallet wallet, String subnetwork, Map<String, Object> params, String reason) {
         super(reason);

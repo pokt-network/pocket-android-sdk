@@ -4,9 +4,9 @@ import java.util.Map;
 
 public class ImportWalletException extends Exception {
 
-    String privateKey;
-    String address;
-    Map<String, Object> data;
+    private String privateKey;
+    private String address;
+    private Map<String, Object> data;
 
     public ImportWalletException(String privateKey, String address, Map<String, Object> data, String reason) {
         super(reason);

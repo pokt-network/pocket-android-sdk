@@ -8,7 +8,7 @@ import network.pokt.pocketsdk.interfaces.Codable;
 
 public class Transaction implements Codable {
 
-    protected class Request extends JSONObject {
+    private class Request extends JSONObject {
 
         @NotNull public String network;
         @NotNull public String subnetwork;
@@ -28,10 +28,10 @@ public class Transaction implements Codable {
         }
     }
 
-    protected class Response extends JSONObject {
+    private class Response extends JSONObject {
         public String hash;
         public JSONObject metadata;
-        public boolean error;
+        @NotNull public boolean error;
         public String errorMsg;
 
         public Response(String jsonString) throws JSONException {
@@ -43,7 +43,7 @@ public class Transaction implements Codable {
         }
     }
 
-    private Request request;
+    private @NotNull Request request;
     private Response response;
 
     public Transaction(@NotNull String network, @NotNull String subnetwork, @NotNull String serializedTransaction, @NotNull JSONObject transactionMetadata) throws JSONException {

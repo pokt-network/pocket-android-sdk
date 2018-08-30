@@ -51,11 +51,11 @@ public abstract class PocketPlugin {
     public abstract @NotNull List<String> getSubnetworks();
 
     // Class implementation
-    @NotNull Configuration configuration;
-    @NotNull URL queriesURL;
-    @NotNull URL transactionsURL;
-    final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    OkHttpClient client = new OkHttpClient();
+    private @NotNull Configuration configuration;
+    private @NotNull URL queriesURL;
+    private @NotNull URL transactionsURL;
+    private final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private OkHttpClient client = new OkHttpClient();
 
     @SuppressWarnings("unused")
     public PocketPlugin(@NotNull Configuration configuration) throws InvalidConfigurationException {
@@ -68,7 +68,7 @@ public abstract class PocketPlugin {
         }
     }
 
-     <R extends Codable> R sendRequest(R request, URL url) throws IOException, JSONException {
+     private <R extends Codable> @NotNull R sendRequest(@NotNull R request, @NotNull URL url) throws IOException, JSONException {
         RequestBody body = RequestBody.create(this.JSON, request.toJSONRequestString());
         Request urlRequest = new Request.Builder()
                 .url(url)
@@ -81,17 +81,17 @@ public abstract class PocketPlugin {
     }
 
     @SuppressWarnings("unused")
-    public <Q extends Query> Q executeQuery(Q query) throws IOException, JSONException {
+    public <Q extends Query> @NotNull Q executeQuery(@NotNull Q query) throws IOException, JSONException {
         return this.sendRequest(query, queriesURL);
     }
 
     @SuppressWarnings("unused")
-    public <T extends Transaction> T sendTransaction(T transaction) throws IOException, JSONException {
+    public <T extends Transaction> @NotNull T sendTransaction(@NotNull T transaction) throws IOException, JSONException {
         return this.sendRequest(transaction, transactionsURL);
     }
 
-    <R extends Codable> void sendRequestAsync(R request, URL url, SendRequestCallback callback) {
-        RequestBody body = RequestBody.create(this.JSON, request.toJSONRequestString());
+    private void sendRequestAsync(@NotNull URL url, @NotNull SendRequestCallback callback) {
+        RequestBody body = RequestBody.create(this.JSON, callback.getRequest().toJSONRequestString());
         Request urlRequest = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -100,12 +100,12 @@ public abstract class PocketPlugin {
     }
 
     @SuppressWarnings("unused")
-    public <Q extends Query> void executeQueryAsync(Q query, SendRequestCallback callback) {
-        this.sendRequestAsync(query, queriesURL, callback);
+    public <Q extends Query> void executeQueryAsync(@NotNull SendRequestCallback<Q> callback) {
+        this.sendRequestAsync(queriesURL, callback);
     }
 
     @SuppressWarnings("unused")
-    public <T extends Transaction> void sendTransactionAsync(T transaction, SendRequestCallback callback) {
-        this.sendRequestAsync(transaction, transactionsURL, callback);
+    public <T extends Transaction> void sendTransactionAsync(@NotNull SendRequestCallback<T> callback) {
+        this.sendRequestAsync(transactionsURL, callback);
     }
 }
