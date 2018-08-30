@@ -21,20 +21,20 @@ import network.pokt.pocketsdk.util.StringUtils;
 
 public class Wallet extends JSONObject {
 
-    @NotNull String address;
-    @NotNull String privateKey;
-    @NotNull String network;
-    @NotNull String subnetwork;
-    JSONObject data;
-    ECSymmetric crypto = new ECSymmetric();
+    private @NotNull String address;
+    private @NotNull String privateKey;
+    private @NotNull String network;
+    private @NotNull String subnetwork;
+    private JSONObject data;
+    private ECSymmetric crypto = new ECSymmetric();
 
     // Constants
-    static final String WALLET_RECORD_KEYS_KEY = "POCKET_WALLETS_RECORD_KEYS";
-    static final String ADDRESS_KEY = "address";
-    static final String PRIVATE_KEY_KEY = "privateKey";
-    static final String NETWORK_KEY = "network";
-    static final String SUBNETWORK_KEY = "subnetwork";
-    static final String DATA_KEY = "data";
+    private static final String WALLET_RECORD_KEYS_KEY = "POCKET_WALLETS_RECORD_KEYS";
+    private static final String ADDRESS_KEY = "address";
+    private static final String PRIVATE_KEY_KEY = "privateKey";
+    private static final String NETWORK_KEY = "network";
+    private static final String SUBNETWORK_KEY = "subnetwork";
+    private static final String DATA_KEY = "data";
 
     public Wallet(@NotNull String address, @NotNull String privateKey, @NotNull String network, @NotNull String subnetwork, JSONObject data) throws JSONException {
         super();
@@ -50,7 +50,7 @@ public class Wallet extends JSONObject {
         this.put(DATA_KEY, data);
     }
 
-    public Wallet(String jsonString) throws JSONException {
+    public Wallet(@NotNull String jsonString) throws JSONException {
         super(jsonString);
         this.address = this.getString(ADDRESS_KEY);
         this.privateKey = this.getString(PRIVATE_KEY_KEY);

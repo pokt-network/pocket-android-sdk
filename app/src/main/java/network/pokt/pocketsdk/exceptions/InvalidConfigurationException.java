@@ -4,7 +4,7 @@ import network.pokt.pocketsdk.interfaces.Configuration;
 
 public class InvalidConfigurationException extends Exception {
 
-    Configuration configuration;
+    private Configuration configuration;
 
     public InvalidConfigurationException(Configuration configuration, String reason) {
         super(reason);

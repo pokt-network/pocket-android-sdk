@@ -4,9 +4,9 @@ import java.util.Map;
 
 public class CreateQueryException extends Exception {
 
-    String subnetwork;
-    Map<String, Object> params;
-    java.util.Map<String, Object> decoder;
+    private String subnetwork;
+    private Map<String, Object> params;
+    private java.util.Map<String, Object> decoder;
 
     public CreateQueryException(String subnetwork, Map<String, Object> params, Map<String, Object> decoder, String reason) {
         super(reason);

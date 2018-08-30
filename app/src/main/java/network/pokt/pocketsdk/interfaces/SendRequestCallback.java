@@ -14,7 +14,7 @@ import okhttp3.ResponseBody;
 
 public abstract class SendRequestCallback<R extends Codable> implements Callback {
 
-    @NotNull protected R request;
+    private @NotNull R request;
 
     public SendRequestCallback(@NotNull R request) {
         this.request = request;
@@ -36,5 +36,9 @@ public abstract class SendRequestCallback<R extends Codable> implements Callback
         } catch (Exception exception) {
             onResponse(null, exception);
         }
+    }
+
+    public R getRequest() {
+        return request;
     }
 }
