@@ -6,9 +6,17 @@ the given blockchain. For more information about Pocket Node you can checkout th
 For an example plugin feel free to check out our Ethereum plugin here: [https://github.com/pokt-network/pocket-android-eth](https://github.com/pokt-network/pocket-android-eth)
 
 # Installation
-Add the following to your Gradle file `dependencies`:
+Add the following Maven repository to your build.gradle `repositories`:
 
-`implementation 'network.pokt.pocketsdk:sdk'`
+```
+maven {
+    url "https://poktnetwork.bintray.com/PocketAndroidRepository"
+}
+```
+
+Add the following to your Gradle file `dependencies` closure:
+
+`implementation 'network.pokt.pocketsdk:sdk:0.0.1'`
 
 # Creating your Pocket Android Plugin
 A Network plugin will allow the application to send `Transaction` and `Query` objects to any given Pocket Node
