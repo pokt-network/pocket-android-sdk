@@ -47,9 +47,6 @@ public abstract class PocketPlugin {
     @SuppressWarnings("unused")
     public abstract @NotNull String getNetwork();
 
-    @SuppressWarnings("unused")
-    public abstract @NotNull List<String> getSubnetworks();
-
     // Class implementation
     private @NotNull Configuration configuration;
     private @NotNull URL queriesURL;
