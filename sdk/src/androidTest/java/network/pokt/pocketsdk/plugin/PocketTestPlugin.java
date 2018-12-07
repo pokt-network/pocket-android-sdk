@@ -70,9 +70,4 @@ public class PocketTestPlugin extends PocketPlugin {
     public @NotNull String getNetwork() {
         return NETWORK;
     }
-
-    @Override
-    public @NotNull List<String> getSubnetworks() {
-        return SUBNETWORKS;
-    }
 }
