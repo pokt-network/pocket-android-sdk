@@ -20,7 +20,14 @@ First add the following to your root `build.gradle`:
 
 Add the following to your Gradle file `dependencies` closure:
 
-`implementation 'com.github.poktnetwork:pocket-android-sdk:0.0.1`
+`implementation 'com.github.poktnetwork:pocket-android-sdk:0.0.1'`
+
+***Optional***
+
+In the case of having errors installing the dependency with the above steps, try adding the following
+to the `dependencies` closure:
+
+`implementation 'com.android.support:support-core-utils'`
 
 # Creating your Pocket Android Plugin
 A Network plugin will allow the application to send `Transaction` and `Query` objects to any given Pocket Node
