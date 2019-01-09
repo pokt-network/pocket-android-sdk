@@ -28,14 +28,14 @@ public class Query implements Codable {
     }
 
     private class Response extends JSONObject {
-        public JSONObject result;
+        public Object result;
         @NotNull public boolean decoded;
         @NotNull public boolean error;
         public String errorMsg;
 
         public Response(String jsonString) throws JSONException {
             super(jsonString);
-            this.result = this.optJSONObject("result");
+            this.result = JSONObject.wrap(this.opt("result"));
             this.decoded = this.getBoolean("decoded");
             this.error = this.getBoolean("error");
             this.errorMsg = this.optString("error_msg");
@@ -72,7 +72,7 @@ public class Query implements Codable {
     }
 
     @SuppressWarnings("unused")
-    public JSONObject getResult() {
+    public Object getResult() {
         return isExecuted() ? this.response.result : null;
     }
 
