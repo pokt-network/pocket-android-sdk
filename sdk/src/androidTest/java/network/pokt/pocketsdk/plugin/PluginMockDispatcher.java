@@ -25,7 +25,7 @@ class PluginMockDispatcher extends Dispatcher {
                         "          \"subnetwork\": \"4\",\n" +
                         "          \"query\": {},\n" +
                         "          \"decoder\": {},\n" +
-                        "          \"result\": \"0x0\",\n" +
+                        "          \"result\": {},\n" +
                         "          \"decoded\": false,\n" +
                         "          \"error\": false,\n" +
                         "          \"error_msg\": null\n" +

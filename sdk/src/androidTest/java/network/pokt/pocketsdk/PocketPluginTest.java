@@ -49,6 +49,7 @@ public class PocketPluginTest {
         Query response = this.plugin.executeQuery(query);
         assertEquals(response.isExecuted(), true);
         assertEquals(response.isError(), false);
+        assertNotNull(response.getResult());
     }
 
     @Test
@@ -69,6 +70,7 @@ public class PocketPluginTest {
                 assertEquals(exception, null);
                 assertEquals(response.isExecuted(), true);
                 assertEquals(response.isError(), false);
+                assertNotNull(response.getResult());
             }
         });
     }
