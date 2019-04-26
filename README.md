@@ -1,3 +1,6 @@
+# NOTE:
+This repository has been deprecated, please visit the [PocketAndroid repository for the latest on Pocket Android client development.](https://github.com/pokt-network/pocket-android)
+
 # Pocket Android SDK
 Standard Android SDK for the development of Pocket Node Network plugins. By leveraging this SDK
 you can easily build any Blockchain network client and connect to any Pocket Node that supports
